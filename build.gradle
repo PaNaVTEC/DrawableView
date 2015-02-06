@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.0.1'
+    }
+}
+
+def isReleaseBuild() {
+    return version.contains("SNAPSHOT") == false
+}
+
+allprojects {
+    version = VERSION_NAME
+    group = GROUP
+
+    ext {
+        // Android config
+        androidBuildToolsVersion = '21.1.2'
+        androidMinSdkVersion = 9
+        androidTargetSdkVersion = 21
+        androidCompileSdkVersion = 21
+        androidVersionCode = VERSION_CODE.toInteger()
+        androidVersionName = VERSION_NAME
+
+        // Libraries
+        libSupportv4 = 'com.android.support:support-v4:21.0.3'
+    }
+
+    repositories {
+        jcenter()
+    }
+}
