@@ -17,9 +17,9 @@ Add the view to your xml layout in this way:
 
 ```xml
 <me.panavtec.drawableview.DrawableView
-            android:id="@+id/paintView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+        android:id="@+id/paintView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 ```
 
 Now in your activity code set a config to this view:
