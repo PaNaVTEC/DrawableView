@@ -84,13 +84,9 @@ public class PaintViewScroller implements GestureDetector.OnGestureListener {
         this.canvasHeight = canvasHeight;
         contentRect.bottom = canvasHeight;
     }
-
-    public void setViewWidth(int viewWidth) {
+    
+    public void setViewBounds(int viewWidth, int viewHeight) {
         currentViewport.right = viewWidth;
-        delegate.onViewPortChange(currentViewport);
-    }
-
-    public void setViewHeight(int viewHeight) {
         currentViewport.bottom = viewHeight;
         delegate.onViewPortChange(currentViewport);
     }

@@ -52,10 +52,10 @@ public class PaintView extends View implements View.OnTouchListener, PaintViewSc
     }
 
     private void init() {
-        scroller = new PaintViewScroller(getContext(), this, true);
-        scaler = new PaintViewScaler(getContext(), this);
-        logger = new PaintViewLogger();
-        gestureDrawer = new PaintViewDrawer(this);
+        scroller        = new PaintViewScroller(getContext(), this, true);
+        scaler          = new PaintViewScaler(getContext(), this);
+        logger          = new PaintViewLogger();
+        gestureDrawer   = new PaintViewDrawer(this);
         setOnTouchListener(this);
     }
 
@@ -76,8 +76,7 @@ public class PaintView extends View implements View.OnTouchListener, PaintViewSc
     @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int viewWidth = MeasureSpec.getSize(widthMeasureSpec);
         int viewHeight = MeasureSpec.getSize(heightMeasureSpec);
-        scroller.setViewWidth(viewWidth);
-        scroller.setViewHeight(viewHeight);
+        scroller.setViewBounds(viewWidth, viewHeight);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
