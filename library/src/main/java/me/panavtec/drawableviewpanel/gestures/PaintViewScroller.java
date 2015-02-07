@@ -53,14 +53,11 @@ public class PaintViewScroller implements GestureDetector.OnGestureListener {
             setViewportBottomLeft(
                     currentViewport.left + viewportOffsetX,
                     currentViewport.bottom + viewportOffsetY);
-
-            delegate.onScrollMove(currentViewport);
         }
         return true;
     }
 
     private void setViewportBottomLeft(float x, float y) {
-
         float curWidth = currentViewport.width();
         float curHeight = currentViewport.height();
         x = Math.max(0, Math.min(x, contentRect.right - curWidth));
@@ -68,6 +65,7 @@ public class PaintViewScroller implements GestureDetector.OnGestureListener {
 
         currentViewport.set(x, y - curHeight, x + curWidth, y);
         delegate.onScrollerInvalidate();
+        delegate.onViewPortChange(currentViewport);
     }
 
     @Override public void onLongPress(MotionEvent e) {
@@ -89,10 +87,12 @@ public class PaintViewScroller implements GestureDetector.OnGestureListener {
 
     public void setViewWidth(int viewWidth) {
         currentViewport.right = viewWidth;
+        delegate.onViewPortChange(currentViewport);
     }
 
     public void setViewHeight(int viewHeight) {
         currentViewport.bottom = viewHeight;
+        delegate.onViewPortChange(currentViewport);
     }
 
     public void onScaleChange(float scaleFactor) {

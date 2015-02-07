@@ -29,7 +29,6 @@ public class PaintViewSaveState extends View.BaseSavedState {
     }
 
     public static final Creator<PaintViewSaveState> CREATOR = new Creator<PaintViewSaveState>() {
-
         public PaintViewSaveState createFromParcel(Parcel source) {
             return new PaintViewSaveState(source);
         }

@@ -4,5 +4,5 @@ import android.graphics.RectF;
 
 public interface PaintViewScrollerDelegate {
     void onScrollerInvalidate();
-    void onScrollMove(RectF currentViewport);
+    void onViewPortChange(RectF currentViewport);
 }

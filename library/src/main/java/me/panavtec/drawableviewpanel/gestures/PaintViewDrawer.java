@@ -11,7 +11,7 @@ import me.panavtec.drawableviewpanel.SerializablePath;
 
 import java.util.List;
 
-public class PaintViewGestureDrawer {
+public class PaintViewDrawer {
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
 
@@ -22,7 +22,7 @@ public class PaintViewGestureDrawer {
     private float scaleFactor = 1.0f;
     private RectF currentViewport = new RectF();
 
-    public PaintViewGestureDrawer(PaintViewDrawerDelegate delegate) {
+    public PaintViewDrawer(PaintViewDrawerDelegate delegate) {
         this.delegate = delegate;
 
         this.paint.setStyle(Paint.Style.STROKE);
@@ -34,7 +34,7 @@ public class PaintViewGestureDrawer {
         float touchX = MotionEventCompat.getX(event, 0) / scaleFactor + currentViewport.left;
         float touchY = MotionEventCompat.getY(event, 0) / scaleFactor + currentViewport.top;
 
-//        Log.d("Drawer", "T[" + touchX + "," + touchY + "] V[" + viewPortX + "," + viewPortY + "] S[" + scaleFactor + "]");
+        Log.d("Drawer", "T[" + touchX + "," + touchY + "] V[" + currentViewport.toShortString() + "] S[" + scaleFactor + "]");
         switch (MotionEventCompat.getActionMasked(event)) {
             case MotionEvent.ACTION_DOWN:
                 actionDown(touchX, touchY);

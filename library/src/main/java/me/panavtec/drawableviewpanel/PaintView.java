@@ -10,8 +10,8 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import me.panavtec.drawableviewpanel.gestures.PaintViewDrawer;
 import me.panavtec.drawableviewpanel.gestures.PaintViewDrawerDelegate;
-import me.panavtec.drawableviewpanel.gestures.PaintViewGestureDrawer;
 import me.panavtec.drawableviewpanel.gestures.PaintViewLogger;
 import me.panavtec.drawableviewpanel.gestures.PaintViewScaler;
 import me.panavtec.drawableviewpanel.gestures.PaintViewScalerDelegate;
@@ -27,7 +27,7 @@ public class PaintView extends View implements View.OnTouchListener, PaintViewSc
     private PaintViewScroller scroller;
     private PaintViewScaler scaler;
     private PaintViewLogger logger;
-    private PaintViewGestureDrawer gestureDrawer;
+    private PaintViewDrawer gestureDrawer;
     private int canvasHeight;
     private int canvasWidth;
 
@@ -55,7 +55,7 @@ public class PaintView extends View implements View.OnTouchListener, PaintViewSc
         scroller = new PaintViewScroller(getContext(), this, true);
         scaler = new PaintViewScaler(getContext(), this);
         logger = new PaintViewLogger();
-        gestureDrawer = new PaintViewGestureDrawer(this);
+        gestureDrawer = new PaintViewDrawer(this);
         setOnTouchListener(this);
     }
 
@@ -147,7 +147,7 @@ public class PaintView extends View implements View.OnTouchListener, PaintViewSc
         invalidate();
     }
 
-    @Override public void onScrollMove(RectF currentViewport) {
+    @Override public void onViewPortChange(RectF currentViewport) {
         gestureDrawer.changedViewPort(currentViewport);
     }
 
