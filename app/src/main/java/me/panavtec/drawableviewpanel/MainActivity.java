@@ -14,6 +14,7 @@ public class MainActivity extends Activity {
     private Button changeColorButton;
     private Button strokeWidthMinusButton;
     private Button strokeWidthPlusButton;
+    private Button undoButton;
     private PaintViewConfig config = new PaintViewConfig();
     
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class MainActivity extends Activity {
         strokeWidthMinusButton = (Button) findViewById(R.id.strokeWidthMinusButton);
         strokeWidthPlusButton = (Button) findViewById(R.id.strokeWidthPlusButton);
         changeColorButton = (Button) findViewById(R.id.changeColorButton);
+        undoButton = (Button) findViewById(R.id.undoButton);
         
         config.setStrokeColor(getResources().getColor(android.R.color.black));
         config.setStrokeWidth(20.0f);
@@ -50,6 +52,11 @@ public class MainActivity extends Activity {
             @Override public void onClick(View v) {
                 Random random = new Random();
                 config.setStrokeColor(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+            }
+        });
+        undoButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                paintView.undo();
             }
         });
         

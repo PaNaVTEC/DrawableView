@@ -23,6 +23,12 @@
                 android:text="Color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
+        <Button
+                android:id="@+id/undoButton"
+                android:text="Undo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         
     </LinearLayout>
     
