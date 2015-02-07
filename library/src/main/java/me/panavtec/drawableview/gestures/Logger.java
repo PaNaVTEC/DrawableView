@@ -10,7 +10,7 @@ package me.panavtec.drawableview.gestures;
 
 import android.util.Log;
 import android.view.MotionEvent;
-import me.panavtec.library.BuildConfig;
+import me.panavtec.drawableview.BuildConfig;
 
 public class Logger {
 
