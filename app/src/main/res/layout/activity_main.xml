@@ -32,7 +32,7 @@
         
     </LinearLayout>
     
-    <me.panavtec.drawableviewpanel.PaintView
+    <me.panavtec.drawableview.DrawableView
             android:id="@+id/paintView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

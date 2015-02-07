@@ -1,4 +1,4 @@
-package me.panavtec.drawableviewpanel;
+package me.panavtec.drawableview.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,16 +6,16 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-public class PaintViewSaveState extends View.BaseSavedState {
+public class DrawableViewSaveState extends View.BaseSavedState {
 
     private ArrayList<SerializablePath> historyPaths;
 
-    public PaintViewSaveState(Parcel in) {
+    public DrawableViewSaveState(Parcel in) {
         super(in);
         this.historyPaths = (ArrayList<SerializablePath>) in.readSerializable();
     }
 
-    public PaintViewSaveState(Parcelable parcelable, ArrayList<SerializablePath> historyPaths) {
+    public DrawableViewSaveState(Parcelable parcelable, ArrayList<SerializablePath> historyPaths) {
         super(parcelable);
         this.historyPaths = historyPaths;
     }
@@ -28,13 +28,13 @@ public class PaintViewSaveState extends View.BaseSavedState {
         return historyPaths;
     }
 
-    public static final Creator<PaintViewSaveState> CREATOR = new Creator<PaintViewSaveState>() {
-        public PaintViewSaveState createFromParcel(Parcel source) {
-            return new PaintViewSaveState(source);
+    public static final Creator<DrawableViewSaveState> CREATOR = new Creator<DrawableViewSaveState>() {
+        public DrawableViewSaveState createFromParcel(Parcel source) {
+            return new DrawableViewSaveState(source);
         }
 
-        public PaintViewSaveState[] newArray(int size) {
-            return new PaintViewSaveState[size];
+        public DrawableViewSaveState[] newArray(int size) {
+            return new DrawableViewSaveState[size];
         }
     };
 }

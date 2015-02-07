@@ -1,8 +1,8 @@
-package me.panavtec.drawableviewpanel;
+package me.panavtec.drawableview;
 
 import java.io.Serializable;
 
-public class PaintViewConfig implements Serializable {
+public class DrawableViewConfig implements Serializable {
 
     private float strokeWidth;
     private int strokeColor;

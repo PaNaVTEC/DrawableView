@@ -1,4 +1,4 @@
-package me.panavtec.drawableviewpanel;
+package me.panavtec.drawableview.internal;
 
 import android.graphics.Path;
 

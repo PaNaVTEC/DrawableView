@@ -1,4 +1,4 @@
-package me.panavtec.drawableviewpanel.gestures;
+package me.panavtec.drawableview.gestures;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,9 +7,9 @@ import android.support.v4.view.MotionEventCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-public class PaintViewScroller implements GestureDetector.OnGestureListener {
+public class Scroller implements GestureDetector.OnGestureListener {
 
-    private final PaintViewScrollerDelegate delegate;
+    private final ScrollerDelegate delegate;
     private final boolean multiTouch;
     private final GestureDetector gestureDetector;
 
@@ -19,7 +19,7 @@ public class PaintViewScroller implements GestureDetector.OnGestureListener {
     private RectF currentViewport = new RectF();
     private RectF contentRect = new RectF();
 
-    public PaintViewScroller(Context context, final PaintViewScrollerDelegate delegate, boolean multiTouch) {
+    public Scroller(Context context, final ScrollerDelegate delegate, boolean multiTouch) {
         this.delegate = delegate;
         this.multiTouch = multiTouch;
         this.gestureDetector = new GestureDetector(context, this);
@@ -45,7 +45,7 @@ public class PaintViewScroller implements GestureDetector.OnGestureListener {
     }
 
     @Override public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        if (!PaintViewScroller.this.multiTouch || MotionEventCompat.getPointerCount(e2) == 2) {
+        if (!Scroller.this.multiTouch || MotionEventCompat.getPointerCount(e2) == 2) {
             float viewportOffsetX = distanceX * currentViewport.width() / contentRect.width();
             float viewportOffsetY = distanceY * currentViewport.height() / contentRect.height();
 

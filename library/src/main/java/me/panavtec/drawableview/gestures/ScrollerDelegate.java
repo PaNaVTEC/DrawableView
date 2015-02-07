@@ -1,8 +1,8 @@
-package me.panavtec.drawableviewpanel.gestures;
+package me.panavtec.drawableview.gestures;
 
 import android.graphics.RectF;
 
-public interface PaintViewScrollerDelegate {
+public interface ScrollerDelegate {
     void onScrollerInvalidate();
     void onViewPortChange(RectF currentViewport);
 }

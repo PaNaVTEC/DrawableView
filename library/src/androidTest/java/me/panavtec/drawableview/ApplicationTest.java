@@ -1,4 +1,4 @@
-package me.panavtec.drawableviewpanel;
+package me.panavtec.drawableview;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

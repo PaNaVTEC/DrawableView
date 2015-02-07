@@ -6,13 +6,13 @@
  * Confidential Information and shall use it only in accordance with 
  * the terms of the license agreement you entered into with Selltag.
  */
-package me.panavtec.drawableviewpanel.gestures;
+package me.panavtec.drawableview.gestures;
 
 import android.util.Log;
 import android.view.MotionEvent;
 import me.panavtec.library.BuildConfig;
 
-public class PaintViewLogger {
+public class Logger {
 
     private static final String TAG = "PaintView";
 

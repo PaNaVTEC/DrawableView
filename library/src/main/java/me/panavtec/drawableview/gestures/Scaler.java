@@ -1,19 +1,19 @@
-package me.panavtec.drawableviewpanel.gestures;
+package me.panavtec.drawableview.gestures;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
-public class PaintViewScaler implements ScaleGestureDetector.OnScaleGestureListener {
+public class Scaler implements ScaleGestureDetector.OnScaleGestureListener {
 
-    private final PaintViewScalerDelegate delegate;
+    private final ScalerDelegate delegate;
     private ScaleGestureDetector scaleGestureDetector;
     private float scaleFactor = 1.0f;
     private float minZoom;
     private float maxZoom;
 
-    public PaintViewScaler(Context context, PaintViewScalerDelegate delegate) {
+    public Scaler(Context context, ScalerDelegate delegate) {
         this.delegate = delegate;
         this.scaleGestureDetector = new ScaleGestureDetector(context, this);
     }
@@ -37,7 +37,7 @@ public class PaintViewScaler implements ScaleGestureDetector.OnScaleGestureListe
     @Override public boolean onScale(ScaleGestureDetector detector) {
         scaleFactor *= detector.getScaleFactor();
         scaleFactor = Math.max(minZoom, Math.min(scaleFactor, maxZoom));
-        PaintViewScaler.this.delegate.onScaleChange(scaleFactor);
+        Scaler.this.delegate.onScaleChange(scaleFactor);
         return true;
     }
 

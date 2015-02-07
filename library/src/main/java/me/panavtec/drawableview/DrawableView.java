@@ -1,4 +1,4 @@
-package me.panavtec.drawableviewpanel;
+package me.panavtec.drawableview;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -10,56 +10,58 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import me.panavtec.drawableviewpanel.gestures.PaintViewDrawer;
-import me.panavtec.drawableviewpanel.gestures.PaintViewDrawerDelegate;
-import me.panavtec.drawableviewpanel.gestures.PaintViewLogger;
-import me.panavtec.drawableviewpanel.gestures.PaintViewScaler;
-import me.panavtec.drawableviewpanel.gestures.PaintViewScalerDelegate;
-import me.panavtec.drawableviewpanel.gestures.PaintViewScroller;
-import me.panavtec.drawableviewpanel.gestures.PaintViewScrollerDelegate;
+import me.panavtec.drawableview.gestures.Drawer;
+import me.panavtec.drawableview.gestures.DrawerDelegate;
+import me.panavtec.drawableview.gestures.Logger;
+import me.panavtec.drawableview.gestures.Scaler;
+import me.panavtec.drawableview.gestures.ScalerDelegate;
+import me.panavtec.drawableview.gestures.Scroller;
+import me.panavtec.drawableview.gestures.ScrollerDelegate;
+import me.panavtec.drawableview.internal.DrawableViewSaveState;
+import me.panavtec.drawableview.internal.SerializablePath;
 
 import java.util.ArrayList;
 
-public class PaintView extends View implements View.OnTouchListener, PaintViewScrollerDelegate, PaintViewDrawerDelegate, PaintViewScalerDelegate {
+public class DrawableView extends View implements View.OnTouchListener, ScrollerDelegate, DrawerDelegate, ScalerDelegate {
 
     private ArrayList<SerializablePath> historyPaths = new ArrayList<>();
 
-    private PaintViewScroller scroller;
-    private PaintViewScaler scaler;
-    private PaintViewLogger logger;
-    private PaintViewDrawer gestureDrawer;
+    private Scroller scroller;
+    private Scaler scaler;
+    private Logger logger;
+    private Drawer gestureDrawer;
     private int canvasHeight;
     private int canvasWidth;
 
-    public PaintView(Context context) {
+    public DrawableView(Context context) {
         super(context);
         init();
     }
 
-    public PaintView(Context context, AttributeSet attrs) {
+    public DrawableView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public PaintView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DrawableView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP) public PaintView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP) public DrawableView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
     private void init() {
-        scroller        = new PaintViewScroller(getContext(), this, true);
-        scaler          = new PaintViewScaler(getContext(), this);
-        logger          = new PaintViewLogger();
-        gestureDrawer   = new PaintViewDrawer(this);
+        scroller        = new Scroller(getContext(), this, true);
+        scaler          = new Scaler(getContext(), this);
+        logger          = new Logger();
+        gestureDrawer   = new Drawer(this);
         setOnTouchListener(this);
     }
 
-    public void setConfig(PaintViewConfig config) {
+    public void setConfig(DrawableViewConfig config) {
         if (config == null) {
             throw new RuntimeException("Paint configuration cannot be null");
         }
@@ -115,7 +117,7 @@ public class PaintView extends View implements View.OnTouchListener, PaintViewSc
         invalidate();
     }
 
-    public Bitmap obtainViewDraw() {
+    public Bitmap obtainBitmap() {
         Bitmap bmp = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
         Canvas composeCanvas = new Canvas(bmp);
         drawGestures(composeCanvas);
@@ -123,12 +125,12 @@ public class PaintView extends View implements View.OnTouchListener, PaintViewSc
     }
 
     @Override protected Parcelable onSaveInstanceState() {
-        return new PaintViewSaveState(super.onSaveInstanceState(), historyPaths);
+        return new DrawableViewSaveState(super.onSaveInstanceState(), historyPaths);
     }
 
     @Override protected void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof PaintViewSaveState) {
-            PaintViewSaveState saveState = (PaintViewSaveState) state;
+        if (state instanceof DrawableViewSaveState) {
+            DrawableViewSaveState saveState = (DrawableViewSaveState) state;
             super.onRestoreInstanceState(saveState.getSuperState());
 
             ArrayList<SerializablePath> savedPaths = saveState.getHistoryPaths();

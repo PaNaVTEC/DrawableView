@@ -1,4 +1,4 @@
-package me.panavtec.drawableviewpanel.gestures;
+package me.panavtec.drawableview.gestures;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -6,23 +6,23 @@ import android.graphics.RectF;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
-import me.panavtec.drawableviewpanel.PaintViewConfig;
-import me.panavtec.drawableviewpanel.SerializablePath;
+import me.panavtec.drawableview.DrawableViewConfig;
+import me.panavtec.drawableview.internal.SerializablePath;
 
 import java.util.List;
 
-public class PaintViewDrawer {
+public class Drawer {
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
 
     private SerializablePath currentDrawingPath = new SerializablePath();
-    private PaintViewDrawerDelegate delegate;
-    private PaintViewConfig config;
+    private DrawerDelegate delegate;
+    private DrawableViewConfig config;
     private boolean downAndUpGesture = false;
     private float scaleFactor = 1.0f;
     private RectF currentViewport = new RectF();
 
-    public PaintViewDrawer(PaintViewDrawerDelegate delegate) {
+    public Drawer(DrawerDelegate delegate) {
         this.delegate = delegate;
 
         this.paint.setStyle(Paint.Style.STROKE);
@@ -110,7 +110,7 @@ public class PaintViewDrawer {
         canvas.drawPath(path, paint);
     }
 
-    public void setConfig(PaintViewConfig config) {
+    public void setConfig(DrawableViewConfig config) {
         this.config = config;
     }
 
