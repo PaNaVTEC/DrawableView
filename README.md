@@ -3,6 +3,10 @@
 
 ![Logo](art/drawabledroid.png)
 
+##Sample app:
+
+![](art/DrawableView.gif)
+
 An Android view that allows to paint with a finger in the screen and saves the result as a Bitmap.
 
 ##Importing to your project
