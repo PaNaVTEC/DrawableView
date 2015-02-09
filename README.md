@@ -1,4 +1,6 @@
-#Android Drawable View ![Maven Central](https://img.shields.io/maven-central/v/me.panavtec/drawableview.svg)
+#Android Drawable View 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Drawable%20View-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1510) ![Maven Central](https://img.shields.io/maven-central/v/me.panavtec/drawableview.svg)
+
 ![Logo](art/drawabledroid.png)
 
 An Android view that allows to paint with a finger in the screen and saves the result as a Bitmap.
