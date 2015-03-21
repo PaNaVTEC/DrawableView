@@ -32,7 +32,6 @@ public class DrawableView extends View
   private Drawer gestureDrawer;
   private int canvasHeight;
   private int canvasWidth;
-  private boolean erase;
 
   public DrawableView(Context context) {
     super(context);
@@ -88,11 +87,7 @@ public class DrawableView extends View
     logger.logEvent(event);
     scaler.onTouchEvent(event);
     scroller.onTouchEvent(event);
-    if (erase) {
-      for (int j = 0 ; j <historyPaths.size())
-    } else {
-      gestureDrawer.onTouchEvent(event);
-    }
+    gestureDrawer.onTouchEvent(event);
     invalidate();
     return true;
   }
