@@ -1,34 +1,36 @@
 buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.1'
-    }
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:1.1.0'
+  }
 }
 
 def isReleaseBuild() {
-    return version.contains("SNAPSHOT") == false
+  return version.contains("SNAPSHOT") == false
 }
 
 allprojects {
-    version = VERSION_NAME
-    group = GROUP
+  version = VERSION_NAME
+  group = GROUP
 
-    ext {
-        // Android config
-        androidBuildToolsVersion = '21.1.2'
-        androidMinSdkVersion = 9
-        androidTargetSdkVersion = 21
-        androidCompileSdkVersion = 21
-        androidVersionCode = VERSION_CODE.toInteger()
-        androidVersionName = VERSION_NAME
+  ext {
+    // Android config
+    androidBuildToolsVersion = '21.1.2'
+    androidMinSdkVersion = 9
+    androidTargetSdkVersion = 21
+    androidCompileSdkVersion = 21
+    androidVersionCode = VERSION_CODE.toInteger()
+    androidVersionName = VERSION_NAME
 
-        // Libraries
-        libSupportv4 = 'com.android.support:support-v4:21.0.3'
-    }
+    // Libraries
+    libSupportv4 = 'com.android.support:support-v4:21.0.3'
+    libJunit = 'junit:junit:4.12'
+    libMockito = 'org.mockito:mockito-core:1.10.19'
+  }
 
-    repositories {
-        jcenter()
-    }
+  repositories {
+    jcenter()
+  }
 }

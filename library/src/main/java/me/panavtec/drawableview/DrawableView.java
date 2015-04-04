@@ -14,18 +14,18 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import java.util.ArrayList;
 import me.panavtec.drawableview.gestures.Drawer;
-import me.panavtec.drawableview.gestures.DrawerDelegate;
+import me.panavtec.drawableview.gestures.DrawerListener;
 import me.panavtec.drawableview.gestures.GestureScrollListener;
 import me.panavtec.drawableview.gestures.ScaleListener;
 import me.panavtec.drawableview.gestures.Scaler;
-import me.panavtec.drawableview.gestures.ScalerDelegate;
+import me.panavtec.drawableview.gestures.ScalerListener;
 import me.panavtec.drawableview.gestures.Scroller;
-import me.panavtec.drawableview.gestures.ScrollerDelegate;
+import me.panavtec.drawableview.gestures.ScrollerListener;
 import me.panavtec.drawableview.internal.DrawableViewSaveState;
 import me.panavtec.drawableview.internal.SerializablePath;
 
 public class DrawableView extends View
-    implements View.OnTouchListener, ScrollerDelegate, DrawerDelegate, ScalerDelegate {
+    implements View.OnTouchListener, ScrollerListener, DrawerListener, ScalerListener {
 
   private final ArrayList<SerializablePath> historyPaths = new ArrayList<>();
 
@@ -149,7 +149,7 @@ public class DrawableView extends View
     gestureDrawer.changedViewPort(currentViewport);
   }
 
-  @Override public void onGestureDrawedOk(SerializablePath serializablePath) {
+  @Override public void onGestureFinished(SerializablePath serializablePath) {
     historyPaths.add(serializablePath);
   }
 

@@ -1,5 +1,5 @@
 package me.panavtec.drawableview.gestures;
 
-public interface ScalerDelegate {
+public interface ScalerListener {
   void onScaleChange(float scaleFactor);
 }

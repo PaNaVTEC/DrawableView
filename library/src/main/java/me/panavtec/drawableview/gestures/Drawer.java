@@ -15,13 +15,13 @@ public class Drawer {
   private Paint paint =
       new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
   private SerializablePath currentDrawingPath = new SerializablePath();
-  private DrawerDelegate delegate;
+  private DrawerListener delegate;
   private DrawableViewConfig config;
   private boolean downAndUpGesture = false;
   private float scaleFactor = 1.0f;
   private RectF currentViewport = new RectF();
 
-  public Drawer(DrawerDelegate delegate) {
+  public Drawer(DrawerListener delegate) {
     this.delegate = delegate;
 
     this.paint.setStyle(Paint.Style.STROKE);
@@ -77,7 +77,7 @@ public class Drawer {
         currentDrawingPath.savePoint();
         downAndUpGesture = false;
       }
-      delegate.onGestureDrawedOk(currentDrawingPath);
+      delegate.onGestureFinished(currentDrawingPath);
       currentDrawingPath = null;
     }
   }

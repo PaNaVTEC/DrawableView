@@ -4,12 +4,12 @@ import android.graphics.Canvas;
 
 public class Scaler implements ScaleListener.OnScaleListener {
 
-  private final ScalerDelegate delegate;
+  private final ScalerListener delegate;
   private float scaleFactor = 1.0f;
   private float minZoom;
   private float maxZoom;
 
-  public Scaler(ScalerDelegate delegate) {
+  public Scaler(ScalerListener delegate) {
     this.delegate = delegate;
   }
 
