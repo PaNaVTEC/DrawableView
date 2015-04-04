@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 
 public class GestureScroller implements GestureScrollListener.OnGestureScrollListener {
 
-  private final ScrollerListener delegate;
+  private final ScrollerListener listener;
 
   private float canvasWidth;
   private float canvasHeight;
@@ -14,8 +14,8 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
   private RectF viewRect = new RectF();
   private RectF canvasRect = new RectF();
 
-  public GestureScroller(final ScrollerListener delegate) {
-    this.delegate = delegate;
+  public GestureScroller(final ScrollerListener listener) {
+    this.listener = listener;
   }
 
   @Override public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
@@ -33,17 +33,19 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
     canvasRect.right = canvasWidth;
     this.canvasHeight = canvasHeight;
     canvasRect.bottom = canvasHeight;
+    listener.onCanvasChanged(canvasRect);
   }
 
   public void setViewBounds(int viewWidth, int viewHeight) {
     viewRect.right = viewWidth;
     viewRect.bottom = viewHeight;
-    delegate.onViewPortChange(viewRect);
+    listener.onViewPortChange(viewRect);
   }
 
   public void onScaleChange(float scaleFactor) {
     canvasRect.right = canvasWidth * scaleFactor;
     canvasRect.bottom = canvasHeight * scaleFactor;
+    listener.onCanvasChanged(canvasRect);
   }
 
   private void setViewportBottomLeft(float x, float y) {
@@ -53,7 +55,7 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
     y = Math.max(0 + currentHeight, Math.min(y, canvasRect.bottom));
 
     viewRect.set(x, y - currentHeight, x + currentWidth, y);
-    delegate.onViewPortChange(viewRect);
+    listener.onViewPortChange(viewRect);
   }
 
   private boolean hasTwoFingers(MotionEvent e) {

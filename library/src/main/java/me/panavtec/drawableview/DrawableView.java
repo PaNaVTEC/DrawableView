@@ -145,8 +145,13 @@ public class DrawableView extends View
   }
 
   @Override public void onViewPortChange(RectF currentViewport) {
-    gestureCreator.changedViewPort(currentViewport);
+    gestureCreator.onViewPortChange(currentViewport);
     canvasDrawer.onViewPortChange(currentViewport);
+  }
+
+  @Override public void onCanvasChanged(RectF canvasRect) {
+    gestureCreator.onCanvasChanged(canvasRect);
+    canvasDrawer.onCanvasChanged(canvasRect);
   }
 
   @Override public void onGestureCreated(SerializablePath serializablePath) {

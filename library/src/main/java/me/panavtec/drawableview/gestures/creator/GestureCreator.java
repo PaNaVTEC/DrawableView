@@ -13,17 +13,18 @@ public class GestureCreator {
   private DrawableViewConfig config;
   private boolean downAndUpGesture = false;
   private float scaleFactor = 1.0f;
-  private RectF currentViewport = new RectF();
+  private RectF viewRect = new RectF();
+  private RectF canvasRect = new RectF();
 
   public GestureCreator(GestureCreatorListener delegate) {
     this.delegate = delegate;
   }
 
   public void onTouchEvent(MotionEvent event) {
-    float touchX = MotionEventCompat.getX(event, 0) / scaleFactor + currentViewport.left;
-    float touchY = MotionEventCompat.getY(event, 0) / scaleFactor + currentViewport.top;
+    float touchX = MotionEventCompat.getX(event, 0) / scaleFactor + viewRect.left;
+    float touchY = MotionEventCompat.getY(event, 0) / scaleFactor + viewRect.top;
 
-    //Log.d("Drawer", "T[" + touchX + "," + touchY + "] V[" + currentViewport.toShortString() + "] S[" + scaleFactor + "]");
+    //Log.d("Drawer", "T[" + touchX + "," + touchY + "] V[" + viewRect.toShortString() + "] S[" + scaleFactor + "]");
     switch (MotionEventCompat.getActionMasked(event)) {
       case MotionEvent.ACTION_DOWN:
         actionDown(touchX, touchY);
@@ -41,7 +42,7 @@ public class GestureCreator {
   }
 
   private void actionDown(float touchX, float touchY) {
-    if (checkInsideCanvas(touchX, touchY)) {
+    if (insideCanvas(touchX, touchY)) {
       downAndUpGesture = true;
       currentDrawingPath = new SerializablePath();
       if (config != null) {
@@ -54,11 +55,13 @@ public class GestureCreator {
   }
 
   private void actionMove(float touchX, float touchY) {
-    if (checkInsideCanvas(touchX, touchY)) {
+    if (insideCanvas(touchX, touchY)) {
       downAndUpGesture = false;
       if (currentDrawingPath != null) {
         currentDrawingPath.saveLineTo(touchX, touchY);
       }
+    } else {
+      actionUp();
     }
   }
 
@@ -79,8 +82,8 @@ public class GestureCreator {
     delegate.onCurrentGestureChanged(null);
   }
 
-  private boolean checkInsideCanvas(float touchX, float touchY) {
-    return currentViewport.contains(touchX, touchY);
+  private boolean insideCanvas(float touchX, float touchY) {
+    return canvasRect.contains(touchX, touchY);
   }
 
   public void setConfig(DrawableViewConfig config) {
@@ -91,7 +94,12 @@ public class GestureCreator {
     this.scaleFactor = scaleFactor;
   }
 
-  public void changedViewPort(RectF currentViewport) {
-    this.currentViewport = currentViewport;
+  public void onViewPortChange(RectF viewRect) {
+    this.viewRect = viewRect;
+  }
+
+  public void onCanvasChanged(RectF canvasRect) {
+    this.canvasRect.right = canvasRect.right / scaleFactor;
+    this.canvasRect.bottom = canvasRect.bottom / scaleFactor;
   }
 }
