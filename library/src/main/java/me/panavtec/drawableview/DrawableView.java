@@ -8,12 +8,15 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import java.util.ArrayList;
 import me.panavtec.drawableview.gestures.Drawer;
 import me.panavtec.drawableview.gestures.DrawerDelegate;
-import me.panavtec.drawableview.gestures.Logger;
+import me.panavtec.drawableview.gestures.GestureScrollListener;
+import me.panavtec.drawableview.gestures.ScaleListener;
 import me.panavtec.drawableview.gestures.Scaler;
 import me.panavtec.drawableview.gestures.ScalerDelegate;
 import me.panavtec.drawableview.gestures.Scroller;
@@ -24,14 +27,15 @@ import me.panavtec.drawableview.internal.SerializablePath;
 public class DrawableView extends View
     implements View.OnTouchListener, ScrollerDelegate, DrawerDelegate, ScalerDelegate {
 
-  private ArrayList<SerializablePath> historyPaths = new ArrayList<>();
+  private final ArrayList<SerializablePath> historyPaths = new ArrayList<>();
 
   private Scroller scroller;
   private Scaler scaler;
-  private Logger logger;
   private Drawer gestureDrawer;
   private int canvasHeight;
   private int canvasWidth;
+  private GestureDetector gestureDetector;
+  private ScaleGestureDetector scaleGestureDetector;
 
   public DrawableView(Context context) {
     super(context);
@@ -55,10 +59,11 @@ public class DrawableView extends View
   }
 
   private void init() {
-    scroller = new Scroller(getContext(), this, true);
-    scaler = new Scaler(getContext(), this);
-    logger = new Logger();
-    gestureDrawer = new Drawer(this);
+    this.scroller = new Scroller(this);
+    this.gestureDetector = new GestureDetector(getContext(), new GestureScrollListener(scroller));
+    this.scaler = new Scaler(this);
+    this.scaleGestureDetector = new ScaleGestureDetector(getContext(), new ScaleListener(scaler));
+    this.gestureDrawer = new Drawer(this);
     setOnTouchListener(this);
   }
 
@@ -66,14 +71,11 @@ public class DrawableView extends View
     if (config == null) {
       throw new RuntimeException("Paint configuration cannot be null");
     }
-
-    this.canvasWidth = config.getCanvasWidth();
-    this.canvasHeight = config.getCanvasHeight();
-    scaler.setMinZoom(config.getMinZoom());
-    scaler.setMaxZoom(config.getMaxZoom());
+    canvasWidth = config.getCanvasWidth();
+    canvasHeight = config.getCanvasHeight();
     gestureDrawer.setConfig(config);
-    scroller.setCanvasWidth(canvasWidth);
-    scroller.setCanvasHeight(canvasHeight);
+    scaler.setZooms(config.getMinZoom(), config.getMaxZoom());
+    scroller.setCanvasBounds(canvasWidth, canvasHeight);
   }
 
   @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -84,9 +86,8 @@ public class DrawableView extends View
   }
 
   @Override public boolean onTouch(View v, MotionEvent event) {
-    logger.logEvent(event);
-    scaler.onTouchEvent(event);
-    scroller.onTouchEvent(event);
+    scaleGestureDetector.onTouchEvent(event);
+    gestureDetector.onTouchEvent(event);
     gestureDrawer.onTouchEvent(event);
     invalidate();
     return true;
@@ -138,14 +139,10 @@ public class DrawableView extends View
       for (SerializablePath p : savedPaths) {
         p.loadPathPointsAsQuadTo();
       }
-      this.historyPaths = savedPaths;
+      this.historyPaths.addAll(savedPaths);
     } else {
       super.onRestoreInstanceState(state);
     }
-  }
-
-  @Override public void onScrollerInvalidate() {
-    invalidate();
   }
 
   @Override public void onViewPortChange(RectF currentViewport) {
