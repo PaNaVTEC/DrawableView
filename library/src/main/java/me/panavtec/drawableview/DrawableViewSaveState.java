@@ -1,9 +1,10 @@
-package me.panavtec.drawableview.internal;
+package me.panavtec.drawableview;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
 import java.util.ArrayList;
+import me.panavtec.drawableview.draw.SerializablePath;
 
 public class DrawableViewSaveState extends View.BaseSavedState {
 

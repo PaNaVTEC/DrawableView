@@ -24,6 +24,8 @@ android {
 
 dependencies {
   compile parent.ext.libSupportv4
+  androidTestCompile parent.ext.libJunit
+  androidTestCompile parent.ext.libMockito
 }
 
 // Used to push in maven
