@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import java.util.ArrayList;
+import me.panavtec.drawableview.draw.CanvasDrawer;
 import me.panavtec.drawableview.draw.PathDrawer;
 import me.panavtec.drawableview.gestures.creator.GestureCreatorListener;
 import me.panavtec.drawableview.gestures.creator.GestureCreator;
@@ -37,6 +38,7 @@ public class DrawableView extends View
   private GestureDetector gestureDetector;
   private ScaleGestureDetector scaleGestureDetector;
   private PathDrawer pathDrawer;
+  private CanvasDrawer canvasDrawer;
   private SerializablePath currentDrawingPath;
 
   public DrawableView(Context context) {
@@ -67,6 +69,7 @@ public class DrawableView extends View
     scaleGestureDetector = new ScaleGestureDetector(getContext(), new GestureScaleListener(gestureScaler));
     gestureCreator = new GestureCreator(this);
     pathDrawer = new PathDrawer();
+    canvasDrawer = new CanvasDrawer();
     setOnTouchListener(this);
   }
 
@@ -105,6 +108,7 @@ public class DrawableView extends View
 
   @Override protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
+    canvasDrawer.onDraw(canvas);
     pathDrawer.onDraw(canvas, currentDrawingPath, paths);
   }
 
@@ -142,7 +146,7 @@ public class DrawableView extends View
 
   @Override public void onViewPortChange(RectF currentViewport) {
     gestureCreator.changedViewPort(currentViewport);
-    pathDrawer.onViewPortChange(currentViewport);
+    canvasDrawer.onViewPortChange(currentViewport);
   }
 
   @Override public void onGestureCreated(SerializablePath serializablePath) {
@@ -156,6 +160,6 @@ public class DrawableView extends View
   @Override public void onScaleChange(float scaleFactor) {
     gestureScroller.onScaleChange(scaleFactor);
     gestureCreator.onScaleChange(scaleFactor);
-    pathDrawer.onScaleChange(scaleFactor);
+    canvasDrawer.onScaleChange(scaleFactor);
   }
 }
