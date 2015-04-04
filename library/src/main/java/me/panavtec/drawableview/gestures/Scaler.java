@@ -2,7 +2,7 @@ package me.panavtec.drawableview.gestures;
 
 import android.graphics.Canvas;
 
-public class Scaler implements ScaleListener.OnScaleListener {
+public class Scaler implements GestureScaleListener.OnScaleListener {
 
   private final ScalerListener delegate;
   private float scaleFactor = 1.0f;

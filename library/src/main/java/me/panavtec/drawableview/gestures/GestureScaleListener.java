@@ -2,11 +2,11 @@ package me.panavtec.drawableview.gestures;
 
 import android.view.ScaleGestureDetector;
 
-public class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
+public class GestureScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
   
   private OnScaleListener listener;
 
-  public ScaleListener(OnScaleListener listener) {
+  public GestureScaleListener(OnScaleListener listener) {
     this.listener = listener;
   }
 

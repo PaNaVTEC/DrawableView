@@ -15,8 +15,8 @@ import android.view.View;
 import java.util.ArrayList;
 import me.panavtec.drawableview.gestures.Drawer;
 import me.panavtec.drawableview.gestures.DrawerListener;
+import me.panavtec.drawableview.gestures.GestureScaleListener;
 import me.panavtec.drawableview.gestures.GestureScrollListener;
-import me.panavtec.drawableview.gestures.ScaleListener;
 import me.panavtec.drawableview.gestures.Scaler;
 import me.panavtec.drawableview.gestures.ScalerListener;
 import me.panavtec.drawableview.gestures.Scroller;
@@ -62,7 +62,7 @@ public class DrawableView extends View
     this.scroller = new Scroller(this);
     this.gestureDetector = new GestureDetector(getContext(), new GestureScrollListener(scroller));
     this.scaler = new Scaler(this);
-    this.scaleGestureDetector = new ScaleGestureDetector(getContext(), new ScaleListener(scaler));
+    this.scaleGestureDetector = new ScaleGestureDetector(getContext(), new GestureScaleListener(scaler));
     this.gestureDrawer = new Drawer(this);
     setOnTouchListener(this);
   }
