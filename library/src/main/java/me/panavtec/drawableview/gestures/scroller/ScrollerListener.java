@@ -1,4 +1,4 @@
-package me.panavtec.drawableview.gestures;
+package me.panavtec.drawableview.gestures.scroller;
 
 import android.graphics.RectF;
 

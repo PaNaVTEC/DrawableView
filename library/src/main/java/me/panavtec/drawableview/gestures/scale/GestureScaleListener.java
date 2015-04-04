@@ -1,8 +1,8 @@
-package me.panavtec.drawableview.gestures;
+package me.panavtec.drawableview.gestures.scale;
 
 import android.view.ScaleGestureDetector;
 
-public class GestureScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
+public final class GestureScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
   
   private OnScaleListener listener;
 

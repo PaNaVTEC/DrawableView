@@ -1,4 +1,4 @@
-package me.panavtec.drawableview.internal;
+package me.panavtec.drawableview.draw;
 
 import android.graphics.Path;
 import java.io.Serializable;

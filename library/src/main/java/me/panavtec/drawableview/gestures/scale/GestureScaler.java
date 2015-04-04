@@ -1,20 +1,14 @@
-package me.panavtec.drawableview.gestures;
+package me.panavtec.drawableview.gestures.scale;
 
-import android.graphics.Canvas;
-
-public class Scaler implements GestureScaleListener.OnScaleListener {
+public class GestureScaler implements GestureScaleListener.OnScaleListener {
 
   private final ScalerListener delegate;
   private float scaleFactor = 1.0f;
   private float minZoom;
   private float maxZoom;
 
-  public Scaler(ScalerListener delegate) {
+  public GestureScaler(ScalerListener delegate) {
     this.delegate = delegate;
-  }
-
-  public void onDraw(Canvas canvas) {
-    canvas.scale(scaleFactor, scaleFactor);
   }
 
   public void setZooms(float minZoom, float maxZoom) {

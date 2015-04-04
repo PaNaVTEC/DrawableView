@@ -1,32 +1,22 @@
-package me.panavtec.drawableview.gestures;
+package me.panavtec.drawableview.gestures.creator;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.v4.view.MotionEventCompat;
-import android.util.Log;
 import android.view.MotionEvent;
-import java.util.List;
 import me.panavtec.drawableview.DrawableViewConfig;
-import me.panavtec.drawableview.internal.SerializablePath;
+import me.panavtec.drawableview.draw.SerializablePath;
 
-public class Drawer {
+public class GestureCreator {
 
-  private Paint paint =
-      new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
   private SerializablePath currentDrawingPath = new SerializablePath();
-  private DrawerListener delegate;
+  private GestureCreatorListener delegate;
   private DrawableViewConfig config;
   private boolean downAndUpGesture = false;
   private float scaleFactor = 1.0f;
   private RectF currentViewport = new RectF();
 
-  public Drawer(DrawerListener delegate) {
+  public GestureCreator(GestureCreatorListener delegate) {
     this.delegate = delegate;
-
-    this.paint.setStyle(Paint.Style.STROKE);
-    this.paint.setStrokeJoin(Paint.Join.ROUND);
-    this.paint.setStrokeCap(Paint.Cap.ROUND);
   }
 
   public void onTouchEvent(MotionEvent event) {
@@ -59,6 +49,7 @@ public class Drawer {
         currentDrawingPath.setWidth(config.getStrokeWidth());
       }
       currentDrawingPath.saveMoveTo(touchX, touchY);
+      delegate.onCurrentGestureChanged(currentDrawingPath);
     }
   }
 
@@ -77,37 +68,19 @@ public class Drawer {
         currentDrawingPath.savePoint();
         downAndUpGesture = false;
       }
-      delegate.onGestureFinished(currentDrawingPath);
+      delegate.onGestureCreated(currentDrawingPath);
       currentDrawingPath = null;
+      delegate.onCurrentGestureChanged(null);
     }
   }
 
   private void actionPointerDown() {
     currentDrawingPath = null;
+    delegate.onCurrentGestureChanged(null);
   }
 
   private boolean checkInsideCanvas(float touchX, float touchY) {
-    Log.d("GestureDrawer",
-        "contains: " + currentViewport.toString() + ", X:" + touchX + ",Y:" + touchY);
     return currentViewport.contains(touchX, touchY);
-  }
-
-  public void onDraw(Canvas canvas) {
-    if (currentDrawingPath != null) {
-      drawGesture(canvas, currentDrawingPath);
-    }
-  }
-
-  public void drawGestures(Canvas canvas, List<SerializablePath> paths) {
-    for (SerializablePath path : paths) {
-      drawGesture(canvas, path);
-    }
-  }
-
-  private void drawGesture(Canvas canvas, SerializablePath path) {
-    paint.setStrokeWidth(path.getWidth());
-    paint.setColor(path.getColor());
-    canvas.drawPath(path, paint);
   }
 
   public void setConfig(DrawableViewConfig config) {

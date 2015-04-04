@@ -1,9 +1,9 @@
-package me.panavtec.drawableview.gestures;
+package me.panavtec.drawableview.gestures.scroller;
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-public class GestureScrollListener implements GestureDetector.OnGestureListener {
+public final class GestureScrollListener implements GestureDetector.OnGestureListener {
 
   private OnGestureScrollListener listener;
 

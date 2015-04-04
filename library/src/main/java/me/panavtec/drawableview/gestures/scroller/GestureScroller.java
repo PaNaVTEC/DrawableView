@@ -1,11 +1,10 @@
-package me.panavtec.drawableview.gestures;
+package me.panavtec.drawableview.gestures.scroller;
 
-import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
 
-public class Scroller implements GestureScrollListener.OnGestureScrollListener {
+public class GestureScroller implements GestureScrollListener.OnGestureScrollListener {
 
   private final ScrollerListener delegate;
 
@@ -15,12 +14,8 @@ public class Scroller implements GestureScrollListener.OnGestureScrollListener {
   private RectF viewRect = new RectF();
   private RectF canvasRect = new RectF();
 
-  public Scroller(final ScrollerListener delegate) {
+  public GestureScroller(final ScrollerListener delegate) {
     this.delegate = delegate;
-  }
-
-  public void onDraw(Canvas canvas) {
-    canvas.translate(-viewRect.left, -viewRect.top);
   }
 
   @Override public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
