@@ -72,7 +72,7 @@ public class DrawableView extends View
 
   public void setConfig(DrawableViewConfig config) {
     if (config == null) {
-      throw new RuntimeException("Paint configuration cannot be null");
+      throw new IllegalArgumentException("Paint configuration cannot be null");
     }
     canvasWidth = config.getCanvasWidth();
     canvasHeight = config.getCanvasHeight();
