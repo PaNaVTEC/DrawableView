@@ -24,8 +24,8 @@ public class CanvasDrawer {
   public void onDraw(Canvas canvas) {
     canvasLogger.log(canvas, canvasRect, viewRect, scaleFactor);
     canvas.drawRect(canvasRect, paint);
-    canvas.scale(scaleFactor, scaleFactor);
     canvas.translate(-viewRect.left, -viewRect.top);
+    canvas.scale(scaleFactor, scaleFactor);
   }
 
   public void onScaleChange(float scaleFactor) {

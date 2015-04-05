@@ -21,8 +21,8 @@ public class GestureCreator {
   }
 
   public void onTouchEvent(MotionEvent event) {
-    float touchX = MotionEventCompat.getX(event, 0) / scaleFactor + viewRect.left;
-    float touchY = MotionEventCompat.getY(event, 0) / scaleFactor + viewRect.top;
+    float touchX = (MotionEventCompat.getX(event, 0) + viewRect.left) / scaleFactor;
+    float touchY = (MotionEventCompat.getY(event, 0) + viewRect.top) / scaleFactor;
 
     //Log.d("Drawer", "T[" + touchX + "," + touchY + "] V[" + viewRect.toShortString() + "] S[" + scaleFactor + "]");
     switch (MotionEventCompat.getActionMasked(event)) {

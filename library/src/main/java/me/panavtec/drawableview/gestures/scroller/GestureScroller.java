@@ -2,6 +2,7 @@ package me.panavtec.drawableview.gestures.scroller;
 
 import android.graphics.RectF;
 import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 
 public class GestureScroller implements GestureScrollListener.OnGestureScrollListener {
@@ -14,6 +15,8 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
   private RectF viewRect = new RectF();
   private RectF canvasRect = new RectF();
 
+  private float scaleFactor = 1.0f;
+
   public GestureScroller(final ScrollerListener listener) {
     this.listener = listener;
   }
@@ -21,9 +24,23 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
   @Override public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
       float distanceY) {
     if (hasTwoFingers(e2)) {
-      float viewportOffsetX = distanceX * viewRect.width() / canvasRect.width();
-      float viewportOffsetY = distanceY * viewRect.height() / canvasRect.height();
-      setViewportBottomLeft(viewRect.left + viewportOffsetX, viewRect.bottom + viewportOffsetY);
+      float viewportOffsetX = distanceX * viewRect.width();
+      float viewportOffsetY = distanceY * viewRect.height();
+      float y = viewRect.bottom + distanceY;
+      float x = viewRect.left + distanceX;
+      Log.d("onScroll", "Dx: "
+          + distanceX
+          + ", Dy: "
+          + distanceY
+          + "VOFX: "
+          + viewportOffsetX
+          + ", VOFY:"
+          + viewportOffsetY
+          + ", X: "
+          + x
+          + ", Y: "
+          + y);
+      setViewportBottomLeft(x, y);
     }
     return true;
   }
@@ -43,18 +60,21 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
   }
 
   public void onScaleChange(float scaleFactor) {
+    this.scaleFactor = scaleFactor;
     canvasRect.right = canvasWidth * scaleFactor;
     canvasRect.bottom = canvasHeight * scaleFactor;
     listener.onCanvasChanged(canvasRect);
   }
 
   private void setViewportBottomLeft(float x, float y) {
-    float currentWidth = viewRect.width();
-    float currentHeight = viewRect.height();
-    x = Math.max(0, Math.min(x, canvasRect.right - currentWidth));
-    y = Math.max(0 + currentHeight, Math.min(y, canvasRect.bottom));
+    float viewWidth = viewRect.width();
+    float viewHeight = viewRect.height();
+    float left = Math.max(0, Math.min(x, canvasRect.width() - viewWidth));
+    float bottom = Math.max(0 + viewHeight, Math.min(y, canvasRect.height()));
+    float top = bottom - viewHeight;
+    float right = left + viewWidth;
+    viewRect.set(left, top, right, bottom);
 
-    viewRect.set(x, y - currentHeight, x + currentWidth, y);
     listener.onViewPortChange(viewRect);
   }
 
