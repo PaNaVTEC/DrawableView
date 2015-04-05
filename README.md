@@ -29,6 +29,7 @@ Now in your activity code set a config to this view:
 ```java
 DrawableViewConfig config = new DrawableViewConfig();
 config.setStrokeColor(getResources().getColor(android.R.color.black));
+config.setShowCanvasBounds(true); // If the view is bigger than canvas, with this the user will see the bounds (Recommended)
 config.setStrokeWidth(20.0f);
 config.setMinZoom(1.0f);
 config.setMaxZoom(3.0f);
@@ -38,6 +39,23 @@ drawableView.setConfig(config);
 ```
 
 Now the view is ready to paint! You can see the attached sample for more info
+
+To save the results of the view to a Bitmap just call:
+
+```java drawableView.obtainBitmap()```
+
+
+ChangeLog
+=========
+**0.6**
+
+\[**Bug/Improvement**] When the view is bigger than the canvas (config width/height) now I'm showing a rect and don't allow user to draw outside the canvas.
+
+\[**Improvement**] Added obtainBitmap(Bitmap method) to draw inside an already created Bitmap
+
+**0.5**
+
+Initial version
 
 Developed by
 ============
