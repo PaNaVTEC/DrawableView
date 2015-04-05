@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
     Button undoButton = (Button) findViewById(R.id.undoButton);
 
     config.setStrokeColor(getResources().getColor(android.R.color.black));
+    config.setShowCanvasBounds(true);
     config.setStrokeWidth(20.0f);
     config.setMinZoom(1.0f);
     config.setMaxZoom(3.0f);

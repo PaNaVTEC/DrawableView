@@ -8,24 +8,30 @@ import me.panavtec.drawableview.draw.SerializablePath;
 
 public class DrawableViewSaveState extends View.BaseSavedState {
 
-  private ArrayList<SerializablePath> historyPaths;
+  private ArrayList<SerializablePath> paths;
 
   public DrawableViewSaveState(Parcel in) {
     super(in);
-    this.historyPaths = (ArrayList<SerializablePath>) in.readSerializable();
+    this.paths = (ArrayList<SerializablePath>) in.readSerializable();
+    for (SerializablePath p : paths) {
+      p.loadPathPointsAsQuadTo();
+    }
   }
 
-  public DrawableViewSaveState(Parcelable parcelable, ArrayList<SerializablePath> historyPaths) {
+  public DrawableViewSaveState(Parcelable parcelable) {
     super(parcelable);
-    this.historyPaths = historyPaths;
   }
 
   @Override public void writeToParcel(Parcel dest, int flags) {
-    dest.writeSerializable(this.historyPaths);
+    dest.writeSerializable(this.paths);
   }
 
-  public ArrayList<SerializablePath> getHistoryPaths() {
-    return historyPaths;
+  public ArrayList<SerializablePath> getPaths() {
+    return paths;
+  }
+
+  public void setPaths(ArrayList<SerializablePath> paths) {
+    this.paths = paths;
   }
 
   public static final Creator<DrawableViewSaveState> CREATOR =

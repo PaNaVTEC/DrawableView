@@ -15,7 +15,7 @@ public class GestureScaler implements GestureScaleListener.OnScaleListener {
     this.minZoom = minZoom;
     this.maxZoom = maxZoom;
   }
-
+  
   @Override public boolean onScale(float deltaScale) {
     scaleFactor *= deltaScale;
     scaleFactor = Math.max(minZoom, Math.min(scaleFactor, maxZoom));

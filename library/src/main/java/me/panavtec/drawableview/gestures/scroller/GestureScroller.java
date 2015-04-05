@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 
 public class GestureScroller implements GestureScrollListener.OnGestureScrollListener {
 
-  private final ScrollerListener delegate;
+  private final ScrollerListener listener;
 
   private float canvasWidth;
   private float canvasHeight;
@@ -14,16 +14,16 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
   private RectF viewRect = new RectF();
   private RectF canvasRect = new RectF();
 
-  public GestureScroller(final ScrollerListener delegate) {
-    this.delegate = delegate;
+  public GestureScroller(final ScrollerListener listener) {
+    this.listener = listener;
   }
 
   @Override public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
       float distanceY) {
     if (hasTwoFingers(e2)) {
-      float viewportOffsetX = distanceX * viewRect.width() / canvasRect.width();
-      float viewportOffsetY = distanceY * viewRect.height() / canvasRect.height();
-      setViewportBottomLeft(viewRect.left + viewportOffsetX, viewRect.bottom + viewportOffsetY);
+      float y = viewRect.bottom + distanceY;
+      float x = viewRect.left + distanceX;
+      setViewportBottomLeft(x, y);
     }
     return true;
   }
@@ -33,27 +33,30 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
     canvasRect.right = canvasWidth;
     this.canvasHeight = canvasHeight;
     canvasRect.bottom = canvasHeight;
+    listener.onCanvasChanged(canvasRect);
   }
 
   public void setViewBounds(int viewWidth, int viewHeight) {
     viewRect.right = viewWidth;
     viewRect.bottom = viewHeight;
-    delegate.onViewPortChange(viewRect);
+    listener.onViewPortChange(viewRect);
   }
 
   public void onScaleChange(float scaleFactor) {
     canvasRect.right = canvasWidth * scaleFactor;
     canvasRect.bottom = canvasHeight * scaleFactor;
+    listener.onCanvasChanged(canvasRect);
   }
 
   private void setViewportBottomLeft(float x, float y) {
-    float currentWidth = viewRect.width();
-    float currentHeight = viewRect.height();
-    x = Math.max(0, Math.min(x, canvasRect.right - currentWidth));
-    y = Math.max(0 + currentHeight, Math.min(y, canvasRect.bottom));
-
-    viewRect.set(x, y - currentHeight, x + currentWidth, y);
-    delegate.onViewPortChange(viewRect);
+    float viewWidth = viewRect.width();
+    float viewHeight = viewRect.height();
+    float left = Math.max(0, Math.min(x, canvasRect.width() - viewWidth));
+    float bottom = Math.max(0 + viewHeight, Math.min(y, canvasRect.height()));
+    float top = bottom - viewHeight;
+    float right = left + viewWidth;
+    viewRect.set(left, top, right, bottom);
+    listener.onViewPortChange(viewRect);
   }
 
   private boolean hasTwoFingers(MotionEvent e) {
