@@ -3,18 +3,18 @@ package me.panavtec.drawableview.gestures.creator;
 import android.graphics.RectF;
 import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
-import me.panavtec.drawableview.DrawableViewConfig;
 import me.panavtec.drawableview.draw.SerializablePath;
 
 public class GestureCreator {
 
-  private SerializablePath currentDrawingPath = new SerializablePath();
+  private SerializablePath currentDrawingPath;
   private GestureCreatorListener delegate;
-  private DrawableViewConfig config;
   private boolean downAndUpGesture = false;
   private float scaleFactor = 1.0f;
   private RectF viewRect = new RectF();
   private RectF canvasRect = new RectF();
+  private float strokeWidth;
+  private int strokeColor;
 
   public GestureCreator(GestureCreatorListener delegate) {
     this.delegate = delegate;
@@ -44,11 +44,7 @@ public class GestureCreator {
   private void actionDown(float touchX, float touchY) {
     if (insideCanvas(touchX, touchY)) {
       downAndUpGesture = true;
-      currentDrawingPath = new SerializablePath();
-      if (config != null) {
-        currentDrawingPath.setColor(config.getStrokeColor());
-        currentDrawingPath.setWidth(config.getStrokeWidth());
-      }
+      currentDrawingPath = new SerializablePath(strokeColor, strokeWidth);
       currentDrawingPath.saveMoveTo(touchX, touchY);
       delegate.onCurrentGestureChanged(currentDrawingPath);
     }
@@ -86,10 +82,6 @@ public class GestureCreator {
     return canvasRect.contains(touchX, touchY);
   }
 
-  public void setConfig(DrawableViewConfig config) {
-    this.config = config;
-  }
-
   public void onScaleChange(float scaleFactor) {
     this.scaleFactor = scaleFactor;
   }
@@ -101,5 +93,13 @@ public class GestureCreator {
   public void onCanvasChanged(RectF canvasRect) {
     this.canvasRect.right = canvasRect.right / scaleFactor;
     this.canvasRect.bottom = canvasRect.bottom / scaleFactor;
+  }
+
+  public void setStrokeWidth(float strokeWidth) {
+    this.strokeWidth = strokeWidth;
+  }
+
+  public void setStrokeColor(int strokeColor) {
+    this.strokeColor = strokeColor;
   }
 }

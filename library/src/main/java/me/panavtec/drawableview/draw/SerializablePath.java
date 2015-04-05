@@ -10,14 +10,11 @@ public class SerializablePath extends Path implements Serializable {
   private int color;
   private float width;
 
-  public SerializablePath() {
+  public SerializablePath(int color, float width) {
     super();
+    this.color = color;
+    this.width = width;
     pathPoints = new ArrayList<>();
-  }
-
-  public SerializablePath(SerializablePath p) {
-    super(p);
-    pathPoints = p.pathPoints;
   }
 
   public void addPathPoints(float[] points) {

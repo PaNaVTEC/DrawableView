@@ -12,36 +12,7 @@ public class DrawableViewConfig implements Serializable {
   private float maxZoom;
   private boolean showCanvasBounds;
 
-  public float getMaxZoom() {
-    return maxZoom;
-  }
-
-  public void setMaxZoom(float maxZoom) {
-    this.maxZoom = maxZoom;
-  }
-
-  public float getMinZoom() {
-    return minZoom;
-  }
-
-  public void setMinZoom(float minZoom) {
-    this.minZoom = minZoom;
-  }
-
-  public int getCanvasHeight() {
-    return canvasHeight;
-  }
-
-  public void setCanvasHeight(int canvasHeight) {
-    this.canvasHeight = canvasHeight;
-  }
-
-  public int getCanvasWidth() {
-    return canvasWidth;
-  }
-
-  public void setCanvasWidth(int canvasWidth) {
-    this.canvasWidth = canvasWidth;
+  protected DrawableViewConfig() {
   }
 
   public float getStrokeWidth() {
@@ -60,11 +31,49 @@ public class DrawableViewConfig implements Serializable {
     this.strokeColor = strokeColor;
   }
 
+  public int getCanvasWidth() {
+    return canvasWidth;
+  }
+
+  public void setCanvasWidth(int canvasWidth) {
+    this.canvasWidth = canvasWidth;
+  }
+
+  public int getCanvasHeight() {
+    return canvasHeight;
+  }
+
+  public void setCanvasHeight(int canvasHeight) {
+    this.canvasHeight = canvasHeight;
+  }
+
+  public float getMinZoom() {
+    return minZoom;
+  }
+
+  public void setMinZoom(float minZoom) {
+    this.minZoom = minZoom;
+  }
+
+  public float getMaxZoom() {
+    return maxZoom;
+  }
+
+  public void setMaxZoom(float maxZoom) {
+    this.maxZoom = maxZoom;
+  }
+
   public boolean isShowCanvasBounds() {
     return showCanvasBounds;
   }
 
   public void setShowCanvasBounds(boolean showCanvasBounds) {
     this.showCanvasBounds = showCanvasBounds;
+  }
+
+  public static class Builder extends DrawableViewConfigBuilder {
+    public Builder(int canvasWidth, int canvasHeight) {
+      super(canvasWidth, canvasHeight);
+    }
   }
 }

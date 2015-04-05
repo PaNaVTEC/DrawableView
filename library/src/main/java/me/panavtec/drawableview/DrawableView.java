@@ -80,10 +80,11 @@ public class DrawableView extends View
     }
     canvasWidth = config.getCanvasWidth();
     canvasHeight = config.getCanvasHeight();
-    gestureCreator.setConfig(config);
+    gestureCreator.setStrokeColor(config.getStrokeColor());
+    gestureCreator.setStrokeWidth(config.getStrokeWidth());
     gestureScaler.setZooms(config.getMinZoom(), config.getMaxZoom());
     gestureScroller.setCanvasBounds(canvasWidth, canvasHeight);
-    canvasDrawer.setConfig(config);
+    canvasDrawer.setConfig(config.isShowCanvasBounds());
   }
 
   @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -163,5 +164,13 @@ public class DrawableView extends View
     gestureScroller.onScaleChange(scaleFactor);
     gestureCreator.onScaleChange(scaleFactor);
     canvasDrawer.onScaleChange(scaleFactor);
+  }
+
+  public void setStrokeWidth(float strokeWidth) {
+    gestureCreator.setStrokeWidth(strokeWidth);
+  }
+
+  public void setStrokeColor(int strokeColor) {
+    gestureCreator.setStrokeColor(strokeColor);
   }
 }

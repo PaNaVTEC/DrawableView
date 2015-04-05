@@ -27,15 +27,12 @@ Add the view to your xml layout in this way:
 Now in your activity code set a config to this view:
 
 ```java
-DrawableViewConfig config = new DrawableViewConfig();
-config.setStrokeColor(getResources().getColor(android.R.color.black));
-config.setShowCanvasBounds(true); // If the view is bigger than canvas, with this the user will see the bounds (Recommended)
-config.setStrokeWidth(20.0f);
-config.setMinZoom(1.0f);
-config.setMaxZoom(3.0f);
-config.setCanvasHeight(1080);
-config.setCanvasWidth(1920);
-drawableView.setConfig(config);
+drawableView.setConfig(new DrawableViewConfig.Builder(1920, 1080).
+        showCanvasBounds().
+        maxZoom(3.0f).
+        strokeWidth(strokeWidth).
+        strokeColor(getResources().getColor(android.R.color.black)).
+        build());
 ```
 
 Now the view is ready to paint! You can see the attached sample for more info

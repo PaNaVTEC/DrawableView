@@ -11,8 +11,8 @@ import me.panavtec.drawableview.DrawableViewConfig;
 
 public class MainActivity extends Activity {
 
+  private float strokeWidth = 20.0f;
   private DrawableView drawableView;
-  private DrawableViewConfig config = new DrawableViewConfig();
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -27,32 +27,32 @@ public class MainActivity extends Activity {
     Button changeColorButton = (Button) findViewById(R.id.changeColorButton);
     Button undoButton = (Button) findViewById(R.id.undoButton);
 
-    config.setStrokeColor(getResources().getColor(android.R.color.black));
-    config.setShowCanvasBounds(true);
-    config.setStrokeWidth(20.0f);
-    config.setMinZoom(1.0f);
-    config.setMaxZoom(3.0f);
-    config.setCanvasHeight(1080);
-    config.setCanvasWidth(1920);
-    drawableView.setConfig(config);
+    drawableView.setConfig(new DrawableViewConfig.Builder(1920, 1080).
+        showCanvasBounds().
+        maxZoom(3.0f).
+        strokeWidth(strokeWidth).
+        strokeColor(getResources().getColor(android.R.color.black)).
+        build());
 
     strokeWidthPlusButton.setOnClickListener(new View.OnClickListener() {
 
       @Override public void onClick(View v) {
-        config.setStrokeWidth(config.getStrokeWidth() + 10);
+        strokeWidth += 10.0f;
+        drawableView.setStrokeWidth(strokeWidth);
       }
     });
     strokeWidthMinusButton.setOnClickListener(new View.OnClickListener() {
 
       @Override public void onClick(View v) {
-        config.setStrokeWidth(config.getStrokeWidth() - 10);
+        strokeWidth -= 10.0f;
+        drawableView.setStrokeWidth(strokeWidth);
       }
     });
     changeColorButton.setOnClickListener(new View.OnClickListener() {
 
       @Override public void onClick(View v) {
         Random random = new Random();
-        config.setStrokeColor(
+        drawableView.setStrokeColor(
             Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)));
       }
     });

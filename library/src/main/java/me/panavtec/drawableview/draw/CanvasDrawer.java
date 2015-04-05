@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import me.panavtec.drawableview.BuildConfig;
-import me.panavtec.drawableview.DrawableViewConfig;
 import me.panavtec.drawableview.draw.log.CanvasLogger;
 import me.panavtec.drawableview.draw.log.DebugCanvasLogger;
 import me.panavtec.drawableview.draw.log.NullCanvasLogger;
@@ -58,7 +57,7 @@ public class CanvasDrawer {
     }
   }
 
-  public void setConfig(DrawableViewConfig config) {
-    this.showCanvasBounds = config.isShowCanvasBounds();
+  public void setConfig(boolean showCanvasBounds) {
+    this.showCanvasBounds = showCanvasBounds;
   }
 }
