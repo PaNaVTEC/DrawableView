@@ -85,11 +85,9 @@ public class DrawableView extends View
     gestureScroller.setCanvasBounds(canvasWidth, canvasHeight);
   }
 
-  @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    int viewWidth = MeasureSpec.getSize(widthMeasureSpec);
-    int viewHeight = MeasureSpec.getSize(heightMeasureSpec);
-    gestureScroller.setViewBounds(viewWidth, viewHeight);
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+  @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    super.onSizeChanged(w, h, oldw, oldh);
+    gestureScroller.setViewBounds(w, h);
   }
 
   @Override public boolean onTouch(View v, MotionEvent event) {
