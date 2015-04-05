@@ -1,28 +1,29 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion parent.ext.androidCompileSdkVersion
-    buildToolsVersion parent.ext.androidBuildToolsVersion
+  compileSdkVersion parent.ext.androidCompileSdkVersion
+  buildToolsVersion parent.ext.androidBuildToolsVersion
 
-    defaultConfig {
-        minSdkVersion parent.ext.androidMinSdkVersion
-        targetSdkVersion parent.ext.androidTargetSdkVersion
-        versionCode parent.ext.androidVersionCode
-        versionName parent.ext.androidVersionName
-    }
+  defaultConfig {
+    minSdkVersion parent.ext.androidMinSdkVersion
+    targetSdkVersion parent.ext.androidTargetSdkVersion
+    versionCode parent.ext.androidVersionCode
+    versionName parent.ext.androidVersionName
+  }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_7
+    targetCompatibility JavaVersion.VERSION_1_7
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
-    }
+  }
 }
 
 dependencies {
-    compile project (":library")
-    compile 'com.android.support:appcompat-v7:21.0.3'
+  releaseCompile project(path: ':library', configuration: 'release')
+  debugCompile project(path: ':library', configuration: 'debug')
+  compile 'com.android.support:appcompat-v7:21.0.3'
 }

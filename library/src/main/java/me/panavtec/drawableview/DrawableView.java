@@ -8,156 +8,160 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
-import me.panavtec.drawableview.gestures.Drawer;
-import me.panavtec.drawableview.gestures.DrawerDelegate;
-import me.panavtec.drawableview.gestures.Logger;
-import me.panavtec.drawableview.gestures.Scaler;
-import me.panavtec.drawableview.gestures.ScalerDelegate;
-import me.panavtec.drawableview.gestures.Scroller;
-import me.panavtec.drawableview.gestures.ScrollerDelegate;
-import me.panavtec.drawableview.internal.DrawableViewSaveState;
-import me.panavtec.drawableview.internal.SerializablePath;
-
 import java.util.ArrayList;
+import me.panavtec.drawableview.draw.CanvasDrawer;
+import me.panavtec.drawableview.draw.PathDrawer;
+import me.panavtec.drawableview.draw.SerializablePath;
+import me.panavtec.drawableview.gestures.creator.GestureCreator;
+import me.panavtec.drawableview.gestures.creator.GestureCreatorListener;
+import me.panavtec.drawableview.gestures.scale.GestureScaleListener;
+import me.panavtec.drawableview.gestures.scale.GestureScaler;
+import me.panavtec.drawableview.gestures.scale.ScalerListener;
+import me.panavtec.drawableview.gestures.scroller.GestureScrollListener;
+import me.panavtec.drawableview.gestures.scroller.GestureScroller;
+import me.panavtec.drawableview.gestures.scroller.ScrollerListener;
 
-public class DrawableView extends View implements View.OnTouchListener, ScrollerDelegate, DrawerDelegate, ScalerDelegate {
+public class DrawableView extends View
+    implements View.OnTouchListener, ScrollerListener, GestureCreatorListener, ScalerListener {
 
-    private ArrayList<SerializablePath> historyPaths = new ArrayList<>();
+  private final ArrayList<SerializablePath> paths = new ArrayList<>();
 
-    private Scroller scroller;
-    private Scaler scaler;
-    private Logger logger;
-    private Drawer gestureDrawer;
-    private int canvasHeight;
-    private int canvasWidth;
+  private GestureScroller gestureScroller;
+  private GestureScaler gestureScaler;
+  private GestureCreator gestureCreator;
+  private int canvasHeight;
+  private int canvasWidth;
+  private GestureDetector gestureDetector;
+  private ScaleGestureDetector scaleGestureDetector;
+  private PathDrawer pathDrawer;
+  private CanvasDrawer canvasDrawer;
+  private SerializablePath currentDrawingPath;
 
-    public DrawableView(Context context) {
-        super(context);
-        init();
+  public DrawableView(Context context) {
+    super(context);
+    init();
+  }
+
+  public DrawableView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    init();
+  }
+
+  public DrawableView(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+    init();
+  }
+
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP) public DrawableView(Context context, AttributeSet attrs,
+      int defStyleAttr, int defStyleRes) {
+    super(context, attrs, defStyleAttr, defStyleRes);
+    init();
+  }
+
+  private void init() {
+    gestureScroller = new GestureScroller(this);
+    gestureDetector = new GestureDetector(getContext(), new GestureScrollListener(gestureScroller));
+    gestureScaler = new GestureScaler(this);
+    scaleGestureDetector =
+        new ScaleGestureDetector(getContext(), new GestureScaleListener(gestureScaler));
+    gestureCreator = new GestureCreator(this);
+    pathDrawer = new PathDrawer();
+    canvasDrawer = new CanvasDrawer();
+    setOnTouchListener(this);
+  }
+
+  public void setConfig(DrawableViewConfig config) {
+    if (config == null) {
+      throw new IllegalArgumentException("Paint configuration cannot be null");
     }
+    canvasWidth = config.getCanvasWidth();
+    canvasHeight = config.getCanvasHeight();
+    gestureCreator.setConfig(config);
+    gestureScaler.setZooms(config.getMinZoom(), config.getMaxZoom());
+    gestureScroller.setCanvasBounds(canvasWidth, canvasHeight);
+    canvasDrawer.setConfig(config);
+  }
 
-    public DrawableView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+  @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    super.onSizeChanged(w, h, oldw, oldh);
+    gestureScroller.setViewBounds(w, h);
+  }
+
+  @Override public boolean onTouch(View v, MotionEvent event) {
+    scaleGestureDetector.onTouchEvent(event);
+    gestureDetector.onTouchEvent(event);
+    gestureCreator.onTouchEvent(event);
+    invalidate();
+    return true;
+  }
+
+  public void undo() {
+    if (paths.size() > 0) {
+      paths.remove(paths.size() - 1);
+      invalidate();
     }
+  }
 
-    public DrawableView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
+  @Override protected void onDraw(Canvas canvas) {
+    super.onDraw(canvas);
+    canvasDrawer.onDraw(canvas);
+    pathDrawer.onDraw(canvas, currentDrawingPath, paths);
+  }
+
+  public void clear() {
+    paths.clear();
+    invalidate();
+  }
+
+  public Bitmap obtainBitmap(Bitmap createdBitmap) {
+    return pathDrawer.obtainBitmap(createdBitmap, paths);
+  }
+
+  public Bitmap obtainBitmap() {
+    return obtainBitmap(Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888));
+  }
+
+  @Override protected Parcelable onSaveInstanceState() {
+    DrawableViewSaveState state = new DrawableViewSaveState(super.onSaveInstanceState());
+    state.setPaths(paths);
+    return state;
+  }
+
+  @Override protected void onRestoreInstanceState(Parcelable state) {
+    if (!(state instanceof DrawableViewSaveState)) {
+      super.onRestoreInstanceState(state);
+    } else {
+      DrawableViewSaveState ss = (DrawableViewSaveState) state;
+      super.onRestoreInstanceState(ss.getSuperState());
+      paths.addAll(ss.getPaths());
     }
+  }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP) public DrawableView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init();
-    }
+  @Override public void onViewPortChange(RectF currentViewport) {
+    gestureCreator.onViewPortChange(currentViewport);
+    canvasDrawer.onViewPortChange(currentViewport);
+  }
 
-    private void init() {
-        scroller        = new Scroller(getContext(), this, true);
-        scaler          = new Scaler(getContext(), this);
-        logger          = new Logger();
-        gestureDrawer   = new Drawer(this);
-        setOnTouchListener(this);
-    }
+  @Override public void onCanvasChanged(RectF canvasRect) {
+    gestureCreator.onCanvasChanged(canvasRect);
+    canvasDrawer.onCanvasChanged(canvasRect);
+  }
 
-    public void setConfig(DrawableViewConfig config) {
-        if (config == null) {
-            throw new RuntimeException("Paint configuration cannot be null");
-        }
+  @Override public void onGestureCreated(SerializablePath serializablePath) {
+    paths.add(serializablePath);
+  }
 
-        this.canvasWidth = config.getCanvasWidth();
-        this.canvasHeight = config.getCanvasHeight();
-        scaler.setMinZoom(config.getMinZoom());
-        scaler.setMaxZoom(config.getMaxZoom());
-        gestureDrawer.setConfig(config);
-        scroller.setCanvasWidth(canvasWidth);
-        scroller.setCanvasHeight(canvasHeight);
-    }
+  @Override public void onCurrentGestureChanged(SerializablePath currentDrawingPath) {
+    this.currentDrawingPath = currentDrawingPath;
+  }
 
-    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int viewWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int viewHeight = MeasureSpec.getSize(heightMeasureSpec);
-        scroller.setViewBounds(viewWidth, viewHeight);
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
-    @Override public boolean onTouch(View v, MotionEvent event) {
-        logger.logEvent(event);
-        scaler.onTouchEvent(event);
-        scroller.onTouchEvent(event);
-        gestureDrawer.onTouchEvent(event);
-        invalidate();
-        return true;
-    }
-
-    public void undo() {
-        if (historyPaths.size() > 0) {
-            historyPaths.remove(historyPaths.size() - 1);
-            invalidate();
-        }
-    }
-
-    @Override protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        canvas.save();
-        scaler.onDraw(canvas);
-        scroller.onDraw(canvas);
-        drawGestures(canvas);
-        canvas.restore();
-    }
-
-    private void drawGestures(Canvas canvas) {
-        gestureDrawer.drawGestures(canvas, historyPaths);
-        gestureDrawer.onDraw(canvas);
-    }
-
-    public void clear() {
-        historyPaths.clear();
-        invalidate();
-    }
-
-    public Bitmap obtainBitmap() {
-        Bitmap bmp = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
-        Canvas composeCanvas = new Canvas(bmp);
-        drawGestures(composeCanvas);
-        return bmp;
-    }
-
-    @Override protected Parcelable onSaveInstanceState() {
-        return new DrawableViewSaveState(super.onSaveInstanceState(), historyPaths);
-    }
-
-    @Override protected void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof DrawableViewSaveState) {
-            DrawableViewSaveState saveState = (DrawableViewSaveState) state;
-            super.onRestoreInstanceState(saveState.getSuperState());
-
-            ArrayList<SerializablePath> savedPaths = saveState.getHistoryPaths();
-            for (SerializablePath p : savedPaths) {
-                p.loadPathPointsAsQuadTo();
-            }
-            this.historyPaths = savedPaths;
-
-        } else {
-            super.onRestoreInstanceState(state);
-        }
-    }
-
-    @Override public void onScrollerInvalidate() {
-        invalidate();
-    }
-
-    @Override public void onViewPortChange(RectF currentViewport) {
-        gestureDrawer.changedViewPort(currentViewport);
-    }
-
-    @Override public void onGestureDrawedOk(SerializablePath serializablePath) {
-        historyPaths.add(serializablePath);
-    }
-
-    @Override public void onScaleChange(float scaleFactor) {
-        scroller.onScaleChange(scaleFactor);
-        gestureDrawer.onScaleChange(scaleFactor);
-    }
+  @Override public void onScaleChange(float scaleFactor) {
+    gestureScroller.onScaleChange(scaleFactor);
+    gestureCreator.onScaleChange(scaleFactor);
+    canvasDrawer.onScaleChange(scaleFactor);
+  }
 }
