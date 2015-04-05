@@ -84,7 +84,8 @@ public class DrawableView extends View
     gestureCreator.setStrokeWidth(config.getStrokeWidth());
     gestureScaler.setZooms(config.getMinZoom(), config.getMaxZoom());
     gestureScroller.setCanvasBounds(canvasWidth, canvasHeight);
-    canvasDrawer.setConfig(config.isShowCanvasBounds());
+    canvasDrawer.setCanvasBackgroundColor(config.getCanvasBackgroundColor());
+    canvasDrawer.setCanvasBorderColor(config.getCanvasBorderColor());
   }
 
   @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {

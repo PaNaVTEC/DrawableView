@@ -6,8 +6,8 @@ public class DrawableViewConfigBuilder {
   private int canvasHeight;
   private float minZoom = 1.0f;
   private float maxZoom = 1.0f;
-  private boolean showCanvasBounds;
-  private int backgroundColor;
+  private int canvasBorderColor;
+  private int canvasBackgroundColor;
   private float strokeWidth;
   private int strokeColor;
 
@@ -32,13 +32,13 @@ public class DrawableViewConfigBuilder {
     return this;
   }
 
-  public DrawableViewConfigBuilder showCanvasBounds() {
-    this.showCanvasBounds = true;
+  public DrawableViewConfigBuilder canvasBackgroundColor(int backgroundColor) {
+    this.canvasBackgroundColor = backgroundColor;
     return this;
   }
 
-  public DrawableViewConfigBuilder backgroundColor(int backgroundColor) {
-    this.backgroundColor = backgroundColor;
+  public DrawableViewConfigBuilder canvasBorderColor(int canvasBorderColor) {
+    this.canvasBorderColor = canvasBorderColor;
     return this;
   }
 
@@ -64,8 +64,8 @@ public class DrawableViewConfigBuilder {
     config.setCanvasHeight(canvasHeight);
     config.setMinZoom(minZoom);
     config.setMaxZoom(maxZoom);
-    config.setShowCanvasBounds(showCanvasBounds);
-    config.setBackgroundColor(backgroundColor);
+    config.setCanvasBackgroundColor(canvasBackgroundColor);
+    config.setCanvasBorderColor(canvasBorderColor);
     config.setStrokeWidth(strokeWidth);
     config.setStrokeColor(strokeColor);
     return config;

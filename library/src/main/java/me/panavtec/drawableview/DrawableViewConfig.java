@@ -10,7 +10,8 @@ public class DrawableViewConfig implements Serializable {
   private int canvasHeight;
   private float minZoom;
   private float maxZoom;
-  private boolean showCanvasBounds;
+  private int canvasBackgroundColor;
+  private int canvasBorderColor;
 
   protected DrawableViewConfig() {
   }
@@ -63,12 +64,20 @@ public class DrawableViewConfig implements Serializable {
     this.maxZoom = maxZoom;
   }
 
-  public boolean isShowCanvasBounds() {
-    return showCanvasBounds;
+  public int getCanvasBackgroundColor() {
+    return canvasBackgroundColor;
   }
 
-  public void setShowCanvasBounds(boolean showCanvasBounds) {
-    this.showCanvasBounds = showCanvasBounds;
+  public void setCanvasBackgroundColor(int backgroundColor) {
+    this.canvasBackgroundColor = backgroundColor;
+  }
+
+  public int getCanvasBorderColor() {
+    return canvasBorderColor;
+  }
+
+  public void setCanvasBorderColor(int canvasBorderColor) {
+    this.canvasBorderColor = canvasBorderColor;
   }
 
   public static class Builder extends DrawableViewConfigBuilder {

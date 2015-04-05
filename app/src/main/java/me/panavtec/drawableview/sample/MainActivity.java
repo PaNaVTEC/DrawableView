@@ -28,9 +28,10 @@ public class MainActivity extends Activity {
     Button undoButton = (Button) findViewById(R.id.undoButton);
 
     drawableView.setConfig(new DrawableViewConfig.Builder(1920, 1080).
-        showCanvasBounds().
         maxZoom(3.0f).
         strokeWidth(strokeWidth).
+        canvasBackgroundColor(Color.LTGRAY).
+        canvasBorderColor(getResources().getColor(android.R.color.black)).
         strokeColor(getResources().getColor(android.R.color.black)).
         build());
 

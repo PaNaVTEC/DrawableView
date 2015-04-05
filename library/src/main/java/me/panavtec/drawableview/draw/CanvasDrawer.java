@@ -10,12 +10,13 @@ import me.panavtec.drawableview.draw.log.NullCanvasLogger;
 
 public class CanvasDrawer {
 
-  private boolean showCanvasBounds;
   private Paint paint;
   private float scaleFactor = 1.0f;
   private RectF viewRect = new RectF();
   private RectF canvasRect = new RectF();
   private CanvasLogger canvasLogger;
+  private int canvasBackgroundColor;
+  private int canvasBorderColor;
 
   public CanvasDrawer() {
     initPaint();
@@ -24,9 +25,7 @@ public class CanvasDrawer {
 
   public void onDraw(Canvas canvas) {
     canvasLogger.log(canvas, canvasRect, viewRect, scaleFactor);
-    if (showCanvasBounds) {
-      canvas.drawRect(canvasRect, paint);
-    }
+    paintCanvas(canvas);
     canvas.translate(-viewRect.left, -viewRect.top);
     canvas.scale(scaleFactor, scaleFactor);
   }
@@ -43,10 +42,18 @@ public class CanvasDrawer {
     this.canvasRect = canvasRect;
   }
 
+  private void paintCanvas(Canvas canvas) {
+    paint.setStyle(Paint.Style.FILL);
+    paint.setColor(canvasBackgroundColor);
+    canvas.drawRect(canvasRect, paint);
+    paint.setStyle(Paint.Style.STROKE);
+    paint.setColor(canvasBorderColor);
+    canvas.drawRect(canvasRect, paint);
+  }
+
   private void initPaint() {
     paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
     paint.setStrokeWidth(2.0f);
-    paint.setStyle(Paint.Style.STROKE);
   }
 
   private void initLogger() {
@@ -57,7 +64,11 @@ public class CanvasDrawer {
     }
   }
 
-  public void setConfig(boolean showCanvasBounds) {
-    this.showCanvasBounds = showCanvasBounds;
+  public void setCanvasBackgroundColor(int canvasBackgroundColor) {
+    this.canvasBackgroundColor = canvasBackgroundColor;
+  }
+
+  public void setCanvasBorderColor(int canvasBorderColor) {
+    this.canvasBorderColor = canvasBorderColor;
   }
 }
