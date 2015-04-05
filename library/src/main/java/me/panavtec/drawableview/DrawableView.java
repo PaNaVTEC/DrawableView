@@ -15,15 +15,15 @@ import android.view.View;
 import java.util.ArrayList;
 import me.panavtec.drawableview.draw.CanvasDrawer;
 import me.panavtec.drawableview.draw.PathDrawer;
-import me.panavtec.drawableview.gestures.creator.GestureCreatorListener;
+import me.panavtec.drawableview.draw.SerializablePath;
 import me.panavtec.drawableview.gestures.creator.GestureCreator;
+import me.panavtec.drawableview.gestures.creator.GestureCreatorListener;
 import me.panavtec.drawableview.gestures.scale.GestureScaleListener;
 import me.panavtec.drawableview.gestures.scale.GestureScaler;
+import me.panavtec.drawableview.gestures.scale.ScalerListener;
 import me.panavtec.drawableview.gestures.scroller.GestureScrollListener;
 import me.panavtec.drawableview.gestures.scroller.GestureScroller;
-import me.panavtec.drawableview.gestures.scale.ScalerListener;
 import me.panavtec.drawableview.gestures.scroller.ScrollerListener;
-import me.panavtec.drawableview.draw.SerializablePath;
 
 public class DrawableView extends View
     implements View.OnTouchListener, ScrollerListener, GestureCreatorListener, ScalerListener {
@@ -66,7 +66,8 @@ public class DrawableView extends View
     gestureScroller = new GestureScroller(this);
     gestureDetector = new GestureDetector(getContext(), new GestureScrollListener(gestureScroller));
     gestureScaler = new GestureScaler(this);
-    scaleGestureDetector = new ScaleGestureDetector(getContext(), new GestureScaleListener(gestureScaler));
+    scaleGestureDetector =
+        new ScaleGestureDetector(getContext(), new GestureScaleListener(gestureScaler));
     gestureCreator = new GestureCreator(this);
     pathDrawer = new PathDrawer();
     canvasDrawer = new CanvasDrawer();
@@ -126,21 +127,18 @@ public class DrawableView extends View
   }
 
   @Override protected Parcelable onSaveInstanceState() {
-    return new DrawableViewSaveState(super.onSaveInstanceState(), paths);
+    DrawableViewSaveState state = new DrawableViewSaveState(super.onSaveInstanceState());
+    state.setPaths(paths);
+    return state;
   }
 
   @Override protected void onRestoreInstanceState(Parcelable state) {
-    if (state instanceof DrawableViewSaveState) {
-      DrawableViewSaveState saveState = (DrawableViewSaveState) state;
-      super.onRestoreInstanceState(saveState.getSuperState());
-
-      ArrayList<SerializablePath> savedPaths = saveState.getHistoryPaths();
-      for (SerializablePath p : savedPaths) {
-        p.loadPathPointsAsQuadTo();
-      }
-      this.paths.addAll(savedPaths);
-    } else {
+    if (!(state instanceof DrawableViewSaveState)) {
       super.onRestoreInstanceState(state);
+    } else {
+      DrawableViewSaveState ss = (DrawableViewSaveState) state;
+      super.onRestoreInstanceState(ss.getSuperState());
+      paths.addAll(ss.getPaths());
     }
   }
 

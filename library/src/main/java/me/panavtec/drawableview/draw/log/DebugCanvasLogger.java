@@ -28,7 +28,19 @@ public class DebugCanvasLogger implements CanvasLogger {
   }
 
   private static String toShortString(RectF rectf) {
-    return "[" + rectf.left + ',' + rectf.top + "][" + rectf.right + ',' + rectf.bottom + ']';
+    return "["
+        + rectf.left
+        + ','
+        + rectf.top
+        + "]["
+        + rectf.right
+        + ','
+        + rectf.bottom
+        + "] B["
+        + rectf.width()
+        + ","
+        + rectf.height()
+        + "]";
   }
 
   private void logLine(Canvas canvas, String text, int lineNumber) {
