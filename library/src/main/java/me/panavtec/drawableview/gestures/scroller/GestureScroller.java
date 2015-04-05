@@ -2,7 +2,6 @@ package me.panavtec.drawableview.gestures.scroller;
 
 import android.graphics.RectF;
 import android.support.v4.view.MotionEventCompat;
-import android.util.Log;
 import android.view.MotionEvent;
 
 public class GestureScroller implements GestureScrollListener.OnGestureScrollListener {
@@ -15,8 +14,6 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
   private RectF viewRect = new RectF();
   private RectF canvasRect = new RectF();
 
-  private float scaleFactor = 1.0f;
-
   public GestureScroller(final ScrollerListener listener) {
     this.listener = listener;
   }
@@ -24,22 +21,8 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
   @Override public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
       float distanceY) {
     if (hasTwoFingers(e2)) {
-      float viewportOffsetX = distanceX * viewRect.width();
-      float viewportOffsetY = distanceY * viewRect.height();
       float y = viewRect.bottom + distanceY;
       float x = viewRect.left + distanceX;
-      Log.d("onScroll", "Dx: "
-          + distanceX
-          + ", Dy: "
-          + distanceY
-          + "VOFX: "
-          + viewportOffsetX
-          + ", VOFY:"
-          + viewportOffsetY
-          + ", X: "
-          + x
-          + ", Y: "
-          + y);
       setViewportBottomLeft(x, y);
     }
     return true;
@@ -60,7 +43,6 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
   }
 
   public void onScaleChange(float scaleFactor) {
-    this.scaleFactor = scaleFactor;
     canvasRect.right = canvasWidth * scaleFactor;
     canvasRect.bottom = canvasHeight * scaleFactor;
     listener.onCanvasChanged(canvasRect);
@@ -74,7 +56,6 @@ public class GestureScroller implements GestureScrollListener.OnGestureScrollLis
     float top = bottom - viewHeight;
     float right = left + viewWidth;
     viewRect.set(left, top, right, bottom);
-
     listener.onViewPortChange(viewRect);
   }
 
