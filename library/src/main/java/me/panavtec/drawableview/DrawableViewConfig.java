@@ -10,6 +10,7 @@ public class DrawableViewConfig implements Serializable {
   private int canvasHeight;
   private float minZoom;
   private float maxZoom;
+  private boolean showCanvasBounds;
 
   public float getMaxZoom() {
     return maxZoom;
@@ -57,5 +58,13 @@ public class DrawableViewConfig implements Serializable {
 
   public void setStrokeColor(int strokeColor) {
     this.strokeColor = strokeColor;
+  }
+
+  public boolean isShowCanvasBounds() {
+    return showCanvasBounds;
+  }
+
+  public void setShowCanvasBounds(boolean showCanvasBounds) {
+    this.showCanvasBounds = showCanvasBounds;
   }
 }

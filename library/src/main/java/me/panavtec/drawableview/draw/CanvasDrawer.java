@@ -4,12 +4,14 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import me.panavtec.drawableview.BuildConfig;
+import me.panavtec.drawableview.DrawableViewConfig;
 import me.panavtec.drawableview.draw.log.CanvasLogger;
 import me.panavtec.drawableview.draw.log.DebugCanvasLogger;
 import me.panavtec.drawableview.draw.log.NullCanvasLogger;
 
 public class CanvasDrawer {
 
+  private boolean showCanvasBounds;
   private Paint paint;
   private float scaleFactor = 1.0f;
   private RectF viewRect = new RectF();
@@ -23,7 +25,9 @@ public class CanvasDrawer {
 
   public void onDraw(Canvas canvas) {
     canvasLogger.log(canvas, canvasRect, viewRect, scaleFactor);
-    canvas.drawRect(canvasRect, paint);
+    if (showCanvasBounds) {
+      canvas.drawRect(canvasRect, paint);
+    }
     canvas.translate(-viewRect.left, -viewRect.top);
     canvas.scale(scaleFactor, scaleFactor);
   }
@@ -54,4 +58,7 @@ public class CanvasDrawer {
     }
   }
 
+  public void setConfig(DrawableViewConfig config) {
+    this.showCanvasBounds = config.isShowCanvasBounds();
+  }
 }

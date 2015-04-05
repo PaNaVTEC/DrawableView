@@ -83,6 +83,7 @@ public class DrawableView extends View
     gestureCreator.setConfig(config);
     gestureScaler.setZooms(config.getMinZoom(), config.getMaxZoom());
     gestureScroller.setCanvasBounds(canvasWidth, canvasHeight);
+    canvasDrawer.setConfig(config);
   }
 
   @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
