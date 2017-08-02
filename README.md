@@ -1,15 +1,15 @@
-#Android Drawable View 
+# Android Drawable View 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Drawable%20View-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1510) ![Maven Central](https://img.shields.io/maven-central/v/me.panavtec/drawableview.svg)
 
 ![Logo](art/drawabledroid.png)
 
-##Sample app:
+## Sample app:
 
 ![](art/DrawableView.gif)
 
 An Android view that allows to paint with a finger in the screen and saves the result as a Bitmap.
 
-##Importing to your project
+## Importing to your project
 Add this dependency to your build.gradle file:
 
 ```java
@@ -18,7 +18,7 @@ dependencies {
 }
 ```
 
-##Basic usage
+## Basic usage
 Add the view to your xml layout in this way:
 
 ```xml
